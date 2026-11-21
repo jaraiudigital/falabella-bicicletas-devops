@@ -90,3 +90,5 @@ test_next_data_structure_exists: Evalúa que el script de estado __NEXT_DATA__ s
 ⚠️ Descargo de Responsabilidad (Disclaimer)
 Este proyecto ha sido desarrollado exclusivamente con fines académicos, científicos y de demostración de arquitectura DevOps/Ingeniería de Datos. El script respeta las pausas de retardo (time.sleep) para evitar sobrecargar los servidores de la plataforma consultada.
 
+Enlace de aplicación en Render:
+https://falabella-bicicletas-devops.onrender.com
