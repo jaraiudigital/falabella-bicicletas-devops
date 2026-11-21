@@ -1,0 +1,42 @@
+name: CI/CD Pipeline & Cloud Deploy - Falabella Bicicletas
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  ci-test-and-cd-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 1. Checkout del código fuente
+      uses: actions/checkout@v4.2.2
+
+    - name: 2. Configurar Python 3.10
+      uses: actions/setup-python@v5.3.0
+      with:
+        python-version: '3.10'
+
+    - name: 3. Instalar dependencias del proyecto
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: 4. Ejecutar Pruebas Automatizadas (Integración Continua - CI)
+      run: |
+        pytest test_app.py -v
+
+    - name: 5. Despliegue Continuo en Render Cloud (CD)
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      env:
+        RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+      run: |
+        if [ -n "$RENDER_DEPLOY_HOOK_URL" ]; then
+          curl -f -X POST "$RENDER_DEPLOY_HOOK_URL"
+          echo "Despliegue continuo disparado en Render Cloud."
+        else
+          echo "Configura RENDER_DEPLOY_HOOK_URL en GitHub Secrets para activar el despliegue."
+        fi
